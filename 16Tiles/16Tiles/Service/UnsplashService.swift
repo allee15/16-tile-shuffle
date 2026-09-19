@@ -14,4 +14,11 @@ class UnsplashService {
     var bag = Set<AnyCancellable>()
     
     private init() { }
+    
+    func getPhotos(query: String?, page: Int = 1) -> AnyPublisher<UnsplashPhotoResponse, Error> {
+        let savedQuery = UserDefaultsService.shared.getValue(key: UserDefaultsKeys.query)
+        let useQuery = query ?? savedQuery ?? GamesDefaults.query
+        
+        return unsplashApi.getSearchPhotos(query: useQuery, page: page)
+    }
 }
