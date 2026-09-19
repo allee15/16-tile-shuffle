@@ -19,6 +19,10 @@ extension Color {
     static let successGreen = Color(hex: "#A8C3A0")
     static let dangerRed = Color(hex: "#D98C88")
     
+    static let gold = Color(hex: "#D4AF37")
+    static let silver = Color(hex: "#A8A9AD")
+    static let bronze = Color(hex: "#B08D57")
+    
     // Semantic roles
     static let backgroundPrimary = Color.creamPrimary
     static let backgroundSecondary = Color.creamSecondary

@@ -9,14 +9,9 @@ import SwiftUI
 import Kingfisher
 
 /*
-//TODO: alexia azi
-    -> Winners list screen, ranking should take into account the number of parallel games if the case. -> DOAR UI!
- */
-
-/*
 //TODO: alexia maine (duminica)
  - cand dau start din pagina de detalii, ca se formeze piesele si sa se amestece
- - sa fac imaginea in bucati si sa le amestez random
+ - sa fac imaginea in bucati si sa le amestec random
  - handling la final de joc
  - handling: "Starting one game, the user can navigate back and pick another item from the list and start another game in parallel (up to 5 games)"
  - handling: "On the main screen, if the game is in progress for the specific selected image then the cell is highlighted." -> isInProgress
