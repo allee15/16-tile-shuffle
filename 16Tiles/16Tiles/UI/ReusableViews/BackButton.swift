@@ -10,10 +10,15 @@ import SwiftUI
 struct BackButton: View {
     @EnvironmentObject private var navigation: Navigation
     var imageColor: Color = .textPrimary
+    var action: (() -> ())?
     
     var body: some View {
         Button {
-            navigation.pop(animated: true)
+            if let action {
+                action()
+            } else {
+                navigation.pop(animated: true)
+            }
         } label: {
             Image(.icNavUp)
                 .resizable()

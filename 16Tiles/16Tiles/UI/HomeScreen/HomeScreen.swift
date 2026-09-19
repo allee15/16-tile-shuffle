@@ -10,8 +10,6 @@ import Kingfisher
 
 /*
 //TODO: alexia maine (duminica)
- - cand dau start din pagina de detalii, ca se formeze piesele si sa se amestece
- - sa fac imaginea in bucati si sa le amestec random
  - handling la final de joc
  - handling: "Starting one game, the user can navigate back and pick another item from the list and start another game in parallel (up to 5 games)"
  - handling: "On the main screen, if the game is in progress for the specific selected image then the cell is highlighted." -> isInProgress
@@ -23,12 +21,10 @@ import Kingfisher
 /*
 //TODO: alexia luni
  - cum se face ranking-ul
- 
- 
-The image list should scroll smoothly and implement image caching.??
+ - daca sunt 3 minute la countdown, userul il mai poate modifica din ecranul de setari? "When the start button is clicked, the countdown timer starts 3 minutes." ; "Settings screen where the we can parametrize the following: The duration of the countdown timer."
 
- When the start button is clicked, the countdown timer starts 3 minutes.
- During these 3 minutes the user should be able to assemble the whole image back by clicking on an image fragment.
+ 
+ 
  The game ends and the timer stops when the image is fully assembled. The user is prompted to provide their name for the list of winners (ranking list).
  If the timer ends and the image is not assembled, the game is lost. No prompt for the name provided, therefore no winners list.
  Starting one game, the user can navigate back and pick another item from the list and start another game in parallel (up to 5 games)
@@ -37,10 +33,7 @@ The image list should scroll smoothly and implement image caching.??
  If the app is killed during the game, on next start the game (games) should continue.
  Treat the usescase when the game (games) is started and the user searched for a new keyword.
 
- Settings screen where the we can parametrize the following:
- In how many tiles (squares) the image is split ex: 4x4 beginner, 16x16 expert.
- The duration of the countdown timer.
- The number of games that can be played in parallel.
+ 
  Winners list screen, ranking should take into account the number of parallel games if the case.
  
  */
