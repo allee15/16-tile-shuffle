@@ -26,17 +26,22 @@ struct RankingScreen: View {
         ZStack {
             MainBgView()
             
-            VStack(spacing: 24) {
+            VStack(spacing: 0) {
                 HStack {
                     BackButton()
                     Spacer()
                 }
                 
-                if ranks.count > 0 {
-                    ForEach(ranks.indices, id: \.self) { index in
-                        WidgetView(name: ranks[index].name, place: index)
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 16) {
+                        if ranks.count > 0 {
+                            ForEach(ranks.indices, id: \.self) { index in
+                                WidgetView(rank: ranks[index], place: index)
+                            }
+                        }
                     }
                 }
+                .padding(.top, 20)
             }
             .padding([.top, .horizontal], 20)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -45,7 +50,7 @@ struct RankingScreen: View {
 }
 
 fileprivate struct WidgetView: View {
-    let name: String
+    let rank: Rank
     let place: Int
     
     var body: some View {
@@ -54,16 +59,18 @@ fileprivate struct WidgetView: View {
                 .font(.bold(size: 20))
                 .foregroundColor(textColor)
             
-            Text(name)
+            Text(rank.name + ": \(rank.score) points")
                 .font(.semiBold(size: 18))
                 .foregroundColor(.textPrimary)
             
             Spacer()
         }.padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .border(Color.textSecondary, width: 1, cornerRadius: 8)
             .frame(maxWidth: .infinity)
-            .padding(.horizontal, 16)
+            .overlay (
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .strokeBorder(Color.textSecondary, lineWidth: 1.5)
+            )
     }
     
     private var textColor: Color {

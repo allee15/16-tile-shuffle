@@ -49,7 +49,7 @@ struct MenuScreen: View {
                     Spacer()
                     
                     SecondaryButtonView(text: "Check ranking list") {
-                        //display ranking screen
+                        navigation.push(RankingScreen().asDestination(), animated: true)
                     }
                     PrimaryButtonView(text: "Save", isDisabled: viewModel.isSaveDisabled) {
                         viewModel.save()
