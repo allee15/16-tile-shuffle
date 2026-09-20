@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MenuScreen: View {
     @StateObject private var viewModel = MenuViewModel()
-    @EnvironmentObject private var navigation: Navigation
+    @EnvironmentObject private var navigation: Router
     
     var body: some View {
         ZStack {
@@ -49,11 +49,11 @@ struct MenuScreen: View {
                     Spacer()
                     
                     SecondaryButtonView(text: "Check ranking list") {
-                        navigation.push(RankingScreen().asDestination(), animated: true)
+                        navigation.push(.ranking)
                     }
                     
                     SecondaryButtonView(text: "Continue active games") {
-                        navigation.push(ActiveGamesScreen().asDestination(), animated: true)
+                        navigation.push(.activeGames)
                     }
                     
                     PrimaryButtonView(text: "Save", isDisabled: viewModel.isSaveDisabled) {
@@ -66,10 +66,11 @@ struct MenuScreen: View {
             .onReceive(viewModel.eventSubject) { event in
                 switch event {
                 case .completed:
-                    navigation.pop(animated: true)
+                    navigation.pop()
                 }
             }
         }
+        .navigationBarHidden(true)
     }
 }
 

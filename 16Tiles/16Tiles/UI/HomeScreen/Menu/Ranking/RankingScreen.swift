@@ -39,6 +39,7 @@ struct RankingScreen: View {
             .padding([.top, .horizontal], 20)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .navigationBarHidden(true)
     }
 }
 

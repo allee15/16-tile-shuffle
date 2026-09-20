@@ -10,7 +10,7 @@ import Kingfisher
 
 struct ActiveGamesScreen: View {
     @StateObject private var viewModel = ActiveGamesViewModel()
-    @EnvironmentObject private var navigation: Navigation
+    @EnvironmentObject private var navigation: Router
     
     var body: some View {
         ZStack {
@@ -31,8 +31,7 @@ struct ActiveGamesScreen: View {
                                                               title: "",
                                                               artistName: "",
                                                               urls: UnsplashUrl(regular: game.imageUrl, full: game.imageUrl))
-                                    let vm = ImageDetailsViewModel(image: image)
-                                    navigation.push(ImageDetailsScreen(viewModel: vm).asDestination(), animated: true)
+                                    navigation.push(.imageDetails(image))
                                 })
                             }
                         } else {
@@ -48,6 +47,7 @@ struct ActiveGamesScreen: View {
             .padding([.top, .horizontal], 20)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .navigationBarHidden(true)
     }
 }
 
@@ -71,29 +71,27 @@ fileprivate struct GameSessionCard: View {
                     .frame(maxWidth: .infinity)
                     .cornerRadius(8, corners: .allCorners)
                 
-                HStack(spacing: 6) {
+                HStack {
                     Spacer()
                     
-                    Text("Continue")
-                        .font(Font.medium(size: 14))
-                    
-                    Image(.icItemresultArrow)
-                        .resizable()
-                        .renderingMode(.template)
-                        .frame(width: 16, height: 16)
-                    
+                    HStack(spacing: 6) {
+                        Text("Continue")
+                            .font(Font.medium(size: 14))
+                        
+                        Image(.icItemresultArrow)
+                            .resizable()
+                            .renderingMode(.template)
+                            .frame(width: 16, height: 16)
+                        
+                    }
+                    .foregroundStyle(Color.success)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 12)
+                    .overlay(
+                        Capsule()
+                            .stroke(Color.success, lineWidth: 1.5)
+                    )
                 }
-                .foregroundStyle(Color.accentButton)
-                .padding(.vertical, 8)
-                .padding(.horizontal, 12)
-                .background(
-                    Capsule()
-                        .fill(Color.backgroundPrimary)
-                )
-                .overlay(
-                    Capsule()
-                        .stroke(Color.accentButton, lineWidth: 1)
-                )
                 .padding([.horizontal, .bottom], 12)
             }
             .overlay (

@@ -9,7 +9,7 @@ import SwiftUI
 import Kingfisher
 
 struct ImageDetailsScreen: View {
-    @EnvironmentObject private var navigation: Navigation
+    @EnvironmentObject private var navigation: Router
     @StateObject var viewModel: ImageDetailsViewModel
     @Environment(\.scenePhase) private var scenePhase
     
@@ -26,7 +26,7 @@ struct ImageDetailsScreen: View {
                         if viewModel.puzzleState == .started {
                             viewModel.savePuzzleState()
                         } else {
-                            navigation.pop(animated: true)
+                            navigation.pop()
                         }
                     }
                     Spacer()
@@ -81,6 +81,7 @@ struct ImageDetailsScreen: View {
                 }.transition(.opacity)
             }
         }
+        .navigationBarHidden(true)
         .animation(.easeInOut(duration: 0.2), value: viewModel.puzzleState)
         .onChange(of: scenePhase) { oldValue, newValue in
             switch newValue {
@@ -98,7 +99,7 @@ struct ImageDetailsScreen: View {
         .onReceive(viewModel.eventSubject) { event in
             switch event {
             case .saved:
-                navigation.pop(animated: true)
+                navigation.pop()
             }
         }
     }

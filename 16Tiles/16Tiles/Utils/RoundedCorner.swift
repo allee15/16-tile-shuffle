@@ -13,22 +13,8 @@ extension View {
         overlay(RoundedRectangle(cornerRadius: cornerRadius).stroke(style, lineWidth: width))
     }
     
-    func borderWithShadow(borderColor: Color, width: CGFloat, cornerRadius: CGFloat, fillColor: Color, shadowColor: Color, shadowRadius: CGFloat, x: CGFloat, y: CGFloat) -> some View {
-        background(
-            RoundedRectangle(cornerRadius: cornerRadius)
-                .fill(fillColor)
-                .shadow(color: shadowColor, radius: shadowRadius, x: x, y: y))
-        .border(borderColor, width: width, cornerRadius: cornerRadius)
-    }
-    
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape( RoundedCorner(radius: radius, corners: corners) )
-    }
-}
-
-extension View {
-    func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 

@@ -27,11 +27,11 @@ class HomeViewModel: BaseViewModel {
         
     override init() {
         super.init()
-//        self.images = [UnsplashPhoto(id: "1", title: "Test", artistName: "Ion Zapada",
-//                                            urls: UnsplashUrl(
-//                                                regular: "https://images.unsplash.com/photo-1773332611516-93826171cef2?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",       
-//                                                full: "https://images.unsplash.com/photo-1773332611516-93826171cef2?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"))]
-        self.loadPhotos(page: 1)
+        self.images = [UnsplashPhoto(id: "1", title: "Test", artistName: "Ion Zapada",
+                                            urls: UnsplashUrl(
+                                                regular: "https://images.unsplash.com/photo-1773332611516-93826171cef2?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",       
+                                                full: "https://images.unsplash.com/photo-1773332611516-93826171cef2?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"))]
+//        self.loadPhotos(page: 1)
     }
     
     private func loadPhotos(page: Int) {

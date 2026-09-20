@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BackButton: View {
-    @EnvironmentObject private var navigation: Navigation
+    @EnvironmentObject private var navigation: Router
     var imageColor: Color = .textPrimary
     var action: (() -> ())?
     
@@ -17,7 +17,7 @@ struct BackButton: View {
             if let action {
                 action()
             } else {
-                navigation.pop(animated: true)
+                navigation.pop()
             }
         } label: {
             Image(.icNavUp)

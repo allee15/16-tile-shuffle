@@ -13,14 +13,14 @@ struct UnsplashPhotoResponse {
     let results: [UnsplashPhoto]
 }
 
-struct UnsplashPhoto {
+struct UnsplashPhoto: Hashable {
     let id: String
     let title: String
     let artistName: String
     let urls: UnsplashUrl
 }
 
-struct UnsplashUrl {
+struct UnsplashUrl: Hashable {
     let regular: String
     let full: String
 }

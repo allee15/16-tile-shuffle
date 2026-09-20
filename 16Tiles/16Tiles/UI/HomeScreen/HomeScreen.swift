@@ -9,8 +9,6 @@ import SwiftUI
 import Kingfisher
 
 /*
-//TODO: alexia maine (duminica)
- Sterge navigarea mready
  Adauga swiftdata/coredata
  */
 
@@ -23,7 +21,7 @@ import Kingfisher
  */
 
 struct HomeScreen: View {
-    @EnvironmentObject private var navigation: Navigation
+    @EnvironmentObject private var navigation: Router
     @StateObject private var viewModel = HomeViewModel()
     
     var body: some View {
@@ -32,7 +30,7 @@ struct HomeScreen: View {
             
             VStack(spacing: 0) {
                 HomeNavBarView(title: "16Tiles") {
-                    navigation.push(MenuScreen().asDestination(), animated: true)
+                    navigation.push(.menu)
                 }
                 
                 if viewModel.isLoading {
@@ -75,8 +73,7 @@ struct HomeScreen: View {
                                 LazyVStack(spacing: 20) {
                                     ForEach(viewModel.images, id: \.id) { image in
                                         HomeImageCardView(image: image, isInProgress: viewModel.imageHasActiveSession(imageId: image.id)) {
-                                            let vm = ImageDetailsViewModel(image: image)
-                                            navigation.push(ImageDetailsScreen(viewModel: vm).asDestination(), animated: true)
+                                            navigation.push(.imageDetails(image))
                                         }.onAppear {
                                             if viewModel.images.last?.id == image.id {
                                                 viewModel.loadMorePages()
@@ -150,10 +147,6 @@ fileprivate struct HomeImageCardView: View {
                     .foregroundStyle(Color.accentButton)
                     .padding(.vertical, 8)
                     .padding(.horizontal, 12)
-                    .background(
-                        Capsule()
-                            .fill(Color.backgroundPrimary)
-                    )
                     .overlay(
                         Capsule()
                             .stroke(Color.accentButton, lineWidth: 1)
