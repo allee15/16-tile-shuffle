@@ -15,7 +15,7 @@ struct TitleNavBarView: View {
             Text(title)
                 .font(.semiBold(size: 28))
                 .foregroundStyle(
-                    LinearGradient(colors: [.textSecondary, .accentButton],
+                    LinearGradient(colors: [.textPrimary, .accentButton],
                                    startPoint: .leading,
                                    endPoint: .trailing)
                 )

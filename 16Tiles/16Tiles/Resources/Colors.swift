@@ -22,13 +22,14 @@ extension Color {
     static let gold = Color(hex: "#D4AF37")
     static let silver = Color(hex: "#A8A9AD")
     static let bronze = Color(hex: "#B08D57")
+    static let mainBlack = Color(hex: "#23201E")
     
     // Semantic roles
     static let backgroundPrimary = Color.creamPrimary
     static let backgroundSecondary = Color.creamSecondary
 
-    static let textPrimary = Color.grayDarkerPrimary
-    static let textSecondary = Color.grayDarkerPrimary.opacity(0.6)
+    static let textPrimary = Color.mainBlack
+    static let textSecondary = Color.grayDarkerPrimary
 
     static let accent = Color.pinkPrimary
     static let accentButton = Color.pinkPrimaryDark

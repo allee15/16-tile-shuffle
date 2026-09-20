@@ -25,7 +25,6 @@ class ImageDetailsViewModel: BaseViewModel {
     var timerDuration: Int
     
     @Published var remainingSeconds: Int = 0
-    private var startedAt: Date?
     private var timerCancellable: AnyCancellable?
     
     init(image: UnsplashPhoto, isInProgress: Bool) {
@@ -38,13 +37,14 @@ class ImageDetailsViewModel: BaseViewModel {
     
     func startGame() {
         puzzleState = .started
-        startedAt = Date()
         remainingSeconds = timerDuration
         
-        startCountdown()
+        resumeCountdown()
     }
     
-    func startCountdown() {
+    func resumeCountdown() {
+        guard puzzleState == .started, remainingSeconds > 0 else {return}
+        
         timerCancellable?.cancel()
         
         timerCancellable = Timer.publish(every: 1, on: .main, in: .common)
@@ -54,18 +54,18 @@ class ImageDetailsViewModel: BaseViewModel {
             })
     }
     
+    func pauseCountdown() {
+        timerCancellable?.cancel()
+        savePuzzleState()
+    }
+    
     private func tickTimer() {
-        guard let startedAt else {return}
+        guard remainingSeconds > 0 else {return}
+        remainingSeconds -= 1
         
-        let elapsed = Int(Date().timeIntervalSince(startedAt))
-        let remaining = timerDuration - elapsed
-        
-        if remaining <= 0 {
-            remainingSeconds = 0
+        if remainingSeconds == 0 {
             timerCancellable?.cancel()
             handleTimeUp()
-        } else {
-            remainingSeconds = remaining
         }
     }
     
@@ -74,8 +74,7 @@ class ImageDetailsViewModel: BaseViewModel {
         //joc pierdut + toate celelalte sunt pierdute
     }
     
-    func savePuzzleAndExit() {
-        timerCancellable?.cancel()
-        //de persistat startedAt + starea gridului 
+    private func savePuzzleState() {
+        //persistă remainingSeconds + tiles-ul grid-ului, cheiat pe image.id
     }
 }

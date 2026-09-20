@@ -31,7 +31,7 @@ struct PrimaryButtonView: View {
                 
                 Spacer()
             }.padding(.vertical, 12)
-                .background(isDisabled ? .textSecondary.opacity(0.5) : bgColor)
+                .background(isDisabled ? .textSecondary.opacity(0.3) : bgColor)
                 .cornerRadius(8, corners: .allCorners)
         }.disabled(isDisabled)
     }

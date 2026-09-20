@@ -36,7 +36,7 @@ struct RankingScreen: View {
                     VStack(spacing: 16) {
                         if ranks.count > 0 {
                             ForEach(ranks.indices, id: \.self) { index in
-                                WidgetView(rank: ranks[index], place: index)
+                                WidgetView(rank: ranks[index], place: index + 1)
                             }
                         }
                     }
@@ -61,7 +61,7 @@ fileprivate struct WidgetView: View {
             
             Text(rank.name + ": \(rank.score) points")
                 .font(.semiBold(size: 18))
-                .foregroundColor(.textPrimary)
+                .foregroundColor(.textSecondary)
             
             Spacer()
         }.padding(.horizontal, 16)
@@ -69,7 +69,7 @@ fileprivate struct WidgetView: View {
             .frame(maxWidth: .infinity)
             .overlay (
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .strokeBorder(Color.textSecondary, lineWidth: 1.5)
+                    .strokeBorder(Color.accentButton, lineWidth: 1.5)
             )
     }
     
@@ -78,7 +78,7 @@ fileprivate struct WidgetView: View {
         case 1: return .gold
         case 2: return .silver
         case 3: return .bronze
-        default: return .textPrimary
+        default: return .textPrimary.opacity(0.6)
         }
     }
 }

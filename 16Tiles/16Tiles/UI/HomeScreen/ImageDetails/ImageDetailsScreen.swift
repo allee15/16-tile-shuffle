@@ -11,6 +11,7 @@ import Kingfisher
 struct ImageDetailsScreen: View {
     @EnvironmentObject private var navigation: Navigation
     @StateObject var viewModel: ImageDetailsViewModel
+    @Environment(\.scenePhase) private var scenePhase
     
     @State private var isTruncated: Bool = false
     @State private var showDescription: Bool = false
@@ -23,7 +24,7 @@ struct ImageDetailsScreen: View {
                 HStack {
                     BackButton {
                         if viewModel.puzzleState == .started {
-                            viewModel.savePuzzleAndExit()
+                            viewModel.pauseCountdown()
                         } else {
                             navigation.pop(animated: true)
                         }
@@ -54,6 +55,16 @@ struct ImageDetailsScreen: View {
                 .presentationDetents([.medium, .large])
             }
         }
+        .onChange(of: scenePhase) { oldValue, newValue in
+            switch newValue {
+            case .active:
+                viewModel.resumeCountdown()
+            case .background, .inactive:
+                viewModel.pauseCountdown()
+            default:
+                break
+            }
+        }
     }
 }
 
@@ -70,7 +81,7 @@ fileprivate struct NotStartedGameView: View {
             
             Text("\(viewModel.gridSize)x\(viewModel.gridSize)")
                 .font(.medium(size: 18))
-                .foregroundStyle(Color.textPrimary)
+                .foregroundStyle(Color.textSecondary)
         }
         
         KFImage(URL(string: viewModel.image.urls.full))

@@ -62,7 +62,7 @@ struct HomeScreen: View {
                         Spacer()
                         Text("An error has occured. Please try again later.")
                             .font(.medium(size: 20))
-                            .foregroundColor(.textPrimary)
+                            .foregroundColor(.textSecondary)
                             .multilineTextAlignment(.center)
                         Spacer()
                     }
@@ -82,7 +82,7 @@ struct HomeScreen: View {
                                 Spacer()
                                 Text("No images to display.")
                                     .font(.medium(size: 20))
-                                    .foregroundColor(.textPrimary)
+                                    .foregroundColor(.textSecondary)
                                     .multilineTextAlignment(.center)
                                 Spacer()
                             }
@@ -220,13 +220,7 @@ fileprivate struct HomeImageCardView: View {
     
     private var borderStyle: AnyShapeStyle {
         if isInProgress {
-            return AnyShapeStyle(
-                LinearGradient(
-                    colors: [.accentButton, .textSecondary],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
+            return AnyShapeStyle(Color.accentButton)
         } else {
             return AnyShapeStyle(Color.textSecondary.opacity(0.5))
         }

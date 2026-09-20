@@ -11,7 +11,7 @@ struct FloatingField: View {
     @Binding var text: String
     var placeHolder: String? = nil
     var keyboardType: UIKeyboardType = .default
-    var colors: (bgColor: Color, borderColor: Color, placeholderForeground: Color) = (.textSecondary.opacity(0.15), .textPrimary.opacity(0.7), .textSecondary)
+    var colors: (bgColor: Color, borderColor: Color, placeholderForeground: Color) = (.textSecondary.opacity(0.1), .textSecondary.opacity(0.7), .textSecondary)
     var icon: ImageResource?
     var errorMessage: String? = nil
     @State private var secure: Bool = true
@@ -60,12 +60,12 @@ struct FloatingField: View {
                         Image(icon)
                             .resizable()
                             .foregroundStyle(Color.textPrimary)
-                            .frame(width: 24, height: 24)
+                            .frame(width: 18, height: 18)
                             .padding(.trailing, 16)
                     }
                 }
             }
-            .frame(height: 54)
+            .frame(height: 48)
             .animation(placeHolder != nil ? customAnimation() : nil, value: text)
             .background((errorMessage ?? "").isEmpty ? colors.bgColor : Color.danger.opacity(0.3))
             .cornerRadius(4, corners: .allCorners)
