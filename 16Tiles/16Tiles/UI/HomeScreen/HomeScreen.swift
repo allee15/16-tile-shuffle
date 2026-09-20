@@ -9,11 +9,7 @@ import SwiftUI
 import Kingfisher
 
 /*
- Adauga swiftdata/coredata
- */
-
-/*
-//TODO: alexia luni
+//TODO: luni
  - cum se face ranking-ul
  - daca sunt 3 minute la countdown, userul il mai poate modifica din ecranul de setari? "When the start button is clicked, the countdown timer starts 3 minutes." ; "Settings screen where the we can parametrize the following: The duration of the countdown timer."
 - cum fac regula de punctaj daca are jocuri in paralel in progres ? "Winners list screen, ranking should take into account the number of parallel games if the case."
