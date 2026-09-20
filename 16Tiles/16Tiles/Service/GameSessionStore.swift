@@ -12,37 +12,36 @@ class GameSessionStore {
     static let shared = GameSessionStore()
     private let userDefaultsService = UserDefaultsService.shared
     
-    private var sessions: [GameSession] = []
-    private var winners: [WinnerEntry] = []
+    private let container: ModelContainer
+    private let context: ModelContext
     
     private init() {
-        load()
-        loadWinners()
+        do {
+            container = try ModelContainer(for: GameSession.self, WinnerEntry.self)
+            context = ModelContext(container)
+        } catch {
+            fatalError("Failed to create ModelContainer: \(error)")
+        }
     }
     
-    private func load() {
-        guard let data = userDefaultsService.getValue(key: UserDefaultsKeys.gameSessions),
-              let decoded = try? JSONDecoder().decode([GameSession].self, from: data) else {
-            return
-        }
-        
-        sessions = decoded
+    private func fetchAllSessions() -> [GameSession] {
+        (try? context.fetch(FetchDescriptor<GameSession>())) ?? []
     }
     
     func hasActiveSession(forImageId imageId: String) -> Bool {
-        sessions.contains { $0.imageId == imageId }
+        fetchAllSessions().contains { $0.imageId == imageId }
     }
     
     func session(forImageId imageId: String) -> GameSession? {
-        sessions.first { $0.imageId == imageId }
+        fetchAllSessions().first { $0.imageId == imageId }
     }
     
     var activeSessionsCount: Int {
-        sessions.count
+        fetchAllSessions().count
     }
     
     var allActiveSessions: [GameSession] {
-        sessions
+        fetchAllSessions()
     }
     
     func createSession(imageId: String, imageUrl: String, gridSize: Int, timerDuration: Int) {
@@ -51,49 +50,40 @@ class GameSessionStore {
                                      gridSize: gridSize,
                                      tilesState: [],
                                      remainingSeconds: timerDuration)
-        sessions.append(newSession)
+        context.insert(newSession)
         save()
     }
     
     func updateSession(imageId: String, tilesState: [Int], remainingSeconds: Int) {
-        guard let index = sessions.firstIndex(where: {$0.imageId == imageId}) else {return}
-        sessions[index].tilesState = tilesState
-        sessions[index].remainingSeconds = remainingSeconds
+        guard let session = session(forImageId: imageId) else {return}
+        session.tilesState = tilesState
+        session.remainingSeconds = remainingSeconds
         save()
     }
     
     func markWon(imageId: String) {
-        sessions.removeAll {$0.imageId == imageId}
+        guard let session = session(forImageId: imageId) else {return}
+        context.delete(session)
         save()
     }
     
     func failAllActiveSessions() {
-        sessions.removeAll()
+        for session in allActiveSessions {
+            context.delete(session)
+        }
         save()
     }
     
-    private func save() {
-        guard let data = try? JSONEncoder().encode(sessions) else { return }
-        userDefaultsService.setValue(key: UserDefaultsKeys.gameSessions, value: data)
-    }
-    
     func saveWinner(entry: WinnerEntry) {
-        winners.append(entry)
-        saveWinners()
+        context.insert(entry)
+        save()
     }
     
     var allWinners: [WinnerEntry] {
-        winners
+        (try? context.fetch(FetchDescriptor<WinnerEntry>())) ?? []
     }
     
-    private func saveWinners() {
-        guard let data = try? JSONEncoder().encode(winners) else { return }
-        userDefaultsService.setValue(key: UserDefaultsKeys.winners, value: data)
-    }
-    
-    private func loadWinners() {
-        guard let data = userDefaultsService.getValue(key: UserDefaultsKeys.winners),
-            let decoded = try? JSONDecoder().decode([WinnerEntry].self, from: data) else { return }
-        winners = decoded
+    private func save() {
+        try? context.save()
     }
 }

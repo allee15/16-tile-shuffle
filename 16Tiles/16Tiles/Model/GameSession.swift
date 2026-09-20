@@ -6,10 +6,10 @@
 //
 
 import Foundation
+import SwiftData
 
-class GameSession: Codable, Identifiable {
-    var id: String {imageId}
-    
+@Model
+class GameSession {
     var imageId: String
     var imageUrl: String
     var gridSize: Int

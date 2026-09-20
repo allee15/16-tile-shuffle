@@ -35,7 +35,7 @@ struct ActiveGamesScreen: View {
                                 })
                             }
                         } else {
-                            Text("No ranks to display.")
+                            Text("No games to display.")
                                 .font(.medium(size: 20))
                                 .foregroundColor(.textSecondary)
                                 .multilineTextAlignment(.center)

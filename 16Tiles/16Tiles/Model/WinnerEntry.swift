@@ -8,15 +8,14 @@
 import Foundation
 import SwiftData
 
-class WinnerEntry: Codable, Identifiable {
-    var id = UUID()
+@Model
+class WinnerEntry {
     var username: String
     var imageId: String
     var timeTaken: Int
     var parallelGamesCount: Int
     
-    init(id: UUID = UUID(), username: String, imageId: String, timeTaken: Int, parallelGamesCount: Int) {
-        self.id = id
+    init(username: String, imageId: String, timeTaken: Int, parallelGamesCount: Int) {
         self.username = username
         self.imageId = imageId
         self.timeTaken = timeTaken
