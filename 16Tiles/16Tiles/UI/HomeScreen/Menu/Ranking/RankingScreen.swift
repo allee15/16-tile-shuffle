@@ -26,6 +26,11 @@ struct RankingScreen: View {
                             ForEach(viewModel.allWinners.indices, id: \.self) { index in
                                 WidgetView(winner: viewModel.allWinners[index], place: index + 1)
                             }
+                        } else {
+                            Text("No ranks to display.")
+                                .font(.medium(size: 20))
+                                .foregroundColor(.textSecondary)
+                                .multilineTextAlignment(.center)
                         }
                     }
                 }

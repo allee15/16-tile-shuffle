@@ -41,6 +41,10 @@ class GameSessionStore {
         sessions.count
     }
     
+    var allActiveSessions: [GameSession] {
+        sessions
+    }
+    
     func createSession(imageId: String, imageUrl: String, gridSize: Int, timerDuration: Int) {
         let newSession = GameSession(imageId: imageId,
                                      imageUrl: imageUrl,

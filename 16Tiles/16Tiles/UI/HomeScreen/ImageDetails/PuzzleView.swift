@@ -101,7 +101,9 @@ struct PuzzleView: View {
         guard let empty = pieces.firstIndex(where: { $0 == nil }) else { return }
         guard isAdjacent(index, empty) else {return}
         
-        pieces.swapAt(index, empty)
+        withAnimation(.easeInOut(duration: 0.2)) {
+            pieces.swapAt(index, empty)
+        }
         
         onTilesChanged?(pieces.map { $0?.pieceIndex ?? -1 })
         checkIfSolved()

@@ -25,7 +25,6 @@ struct ImageDetailsScreen: View {
                     BackButton {
                         if viewModel.puzzleState == .started {
                             viewModel.savePuzzleState()
-//                            viewModel.handleWin()
                         } else {
                             navigation.pop(animated: true)
                         }
@@ -43,7 +42,7 @@ struct ImageDetailsScreen: View {
                 case .won:
                     VStack {
                         Spacer()
-                        Text("Congratulations! You finished the puzzle.")
+                        Text("Congratulations! You have finished the puzzle.")
                             .font(.medium(size: 20))
                             .foregroundColor(.textSecondary)
                             .multilineTextAlignment(.center)
@@ -133,10 +132,10 @@ fileprivate struct NotStartedGameView: View {
                 Image(.imgPlaceholder)
                     .resizable()
             }
+            .centerCropped()
             .aspectRatio(1, contentMode: .fit)
             .frame(maxWidth: .infinity)
             .cornerRadius(8, corners: .allCorners)
-            .clipped()
         
         HStack {
             VStack(alignment: .leading, spacing: 4) {
@@ -207,6 +206,8 @@ fileprivate struct StartedGameView: View {
             }, onTilesChanged: { tiles in
                 viewModel.updateTilesState(tiles: tiles)
             })
+            
+            Spacer()
             
             Button {
                 viewModel.handleWin()

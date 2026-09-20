@@ -51,6 +51,11 @@ struct MenuScreen: View {
                     SecondaryButtonView(text: "Check ranking list") {
                         navigation.push(RankingScreen().asDestination(), animated: true)
                     }
+                    
+                    SecondaryButtonView(text: "Continue active games") {
+                        navigation.push(ActiveGamesScreen().asDestination(), animated: true)
+                    }
+                    
                     PrimaryButtonView(text: "Save", isDisabled: viewModel.isSaveDisabled) {
                         viewModel.save()
                     }

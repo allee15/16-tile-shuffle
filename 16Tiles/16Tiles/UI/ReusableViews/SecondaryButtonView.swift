@@ -30,7 +30,7 @@ struct SecondaryButtonView: View {
                 
                 Spacer()
             }.padding(.vertical, 12)
-                .border(borderColor, width: 1.5, cornerRadius: 8)
+                .border(borderColor, width: 1, cornerRadius: 8)
         }.disabled(isDisabled)
     }
 }
