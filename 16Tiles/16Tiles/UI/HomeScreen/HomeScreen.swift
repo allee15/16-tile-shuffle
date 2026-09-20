@@ -10,32 +10,18 @@ import Kingfisher
 
 /*
 //TODO: alexia maine (duminica)
- - handling la final de joc
- - handling: "Starting one game, the user can navigate back and pick another item from the list and start another game in parallel (up to 5 games)"
- - handling: "On the main screen, if the game is in progress for the specific selected image then the cell is highlighted." -> isInProgress
- - handling: "Losing one of the parallel stated games means losing all of them."
- - handling: "If the app is killed during the game, on next start the game (games) should continue."
+ - handling: "Losing one of the parallel stated games means losing all of them." ??
+ - handling: "If the app is killed during the game, on next start the game (games) should continue." ??
+ 
  - handling: "Treat the usescase when the game (games) is started and the user searched for a new keyword."
+ - de ce nu merge tap-ul pe unele carduri ??
  */
 
 /*
 //TODO: alexia luni
  - cum se face ranking-ul
  - daca sunt 3 minute la countdown, userul il mai poate modifica din ecranul de setari? "When the start button is clicked, the countdown timer starts 3 minutes." ; "Settings screen where the we can parametrize the following: The duration of the countdown timer."
-
- 
- 
- The game ends and the timer stops when the image is fully assembled. The user is prompted to provide their name for the list of winners (ranking list).
- If the timer ends and the image is not assembled, the game is lost. No prompt for the name provided, therefore no winners list.
- Starting one game, the user can navigate back and pick another item from the list and start another game in parallel (up to 5 games)
- On the main screen, if the game is in progress for the specific selected image then the cell is highlighted.
- Losing one of the parallel stated games means losing all of them.
- If the app is killed during the game, on next start the game (games) should continue.
- Treat the usescase when the game (games) is started and the user searched for a new keyword.
-
- 
- Winners list screen, ranking should take into account the number of parallel games if the case.
- 
+- cum fac regula de punctaj daca are jocuri in paralel in progres ? "Winners list screen, ranking should take into account the number of parallel games if the case."
  */
 
 struct HomeScreen: View {
@@ -90,8 +76,8 @@ struct HomeScreen: View {
                             ScrollView(showsIndicators: false) {
                                 LazyVStack(spacing: 20) {
                                     ForEach(viewModel.images, id: \.id) { image in
-                                        HomeImageCardView(image: image, isInProgress: false) {
-                                            let vm = ImageDetailsViewModel(image: image, isInProgress: false)
+                                        HomeImageCardView(image: image, isInProgress: viewModel.imageHasActiveSession(imageId: image.id)) {
+                                            let vm = ImageDetailsViewModel(image: image)
                                             navigation.push(ImageDetailsScreen(viewModel: vm).asDestination(), animated: true)
                                         }.onAppear {
                                             if viewModel.images.last?.id == image.id {
@@ -122,9 +108,6 @@ fileprivate struct HomeImageCardView: View {
     let isInProgress: Bool
     let onTap: () -> ()
     
-    @State private var isTruncated: Bool = false
-    @State private var showDescription: Bool = false
-    
     var body: some View {
         VStack(spacing: 12) {
             KFImage(URL(string: image.urls.regular))
@@ -144,28 +127,6 @@ fileprivate struct HomeImageCardView: View {
                         .font(.medium(size: 18))
                         .foregroundStyle(Color.textPrimary)
                         .lineLimit(2)
-                        .background(
-                            GeometryReader { limitedGeo in
-                                Text(image.title)
-                                    .font(.medium(size: 18))
-                                    .foregroundStyle(Color.textPrimary)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .hidden()
-                                    .background(
-                                        GeometryReader { geo in
-                                            Color.clear
-                                                .onAppear {
-                                                    isTruncated = geo.size.height > limitedGeo.size.height
-                                                }
-                                        }
-                                    )
-                            }
-                        )
-                        .onTapGesture {
-                            if isTruncated {
-                                showDescription = true
-                            }
-                        }
                     
                     Text(image.artistName)
                         .font(.medium(size: 14))
@@ -204,18 +165,6 @@ fileprivate struct HomeImageCardView: View {
             RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .strokeBorder(borderStyle, lineWidth: isInProgress ? 2.5 : 1)
         )
-        .sheet(isPresented: $showDescription) {
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading) {
-                    Text(image.title)
-                        .font(.medium(size: 18))
-                        .foregroundStyle(Color.textPrimary)
-                }
-            }
-            .padding(.top, 32)
-            .padding(.horizontal, 20)
-            .presentationDetents([.medium, .large])
-        }
     }
     
     private var borderStyle: AnyShapeStyle {

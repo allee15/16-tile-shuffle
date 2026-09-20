@@ -12,6 +12,8 @@ enum UserDefaultsKeys {
     static let countdownTimer: Key<Int> = Key(value: "countdownTimer")
     static let gridSize: Key<Int> = Key(value: "gridSize")
     static let maxParallelGames: Key<Int> = Key(value: "maxParallelGames")
+    static let gameSessions: Key<Data> = Key(value: "gameSessions")
+    static let winners: Key<Data> = Key(value: "winners")
 }
 
 enum GamesDefaults {

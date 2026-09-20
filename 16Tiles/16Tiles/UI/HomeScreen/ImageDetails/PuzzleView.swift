@@ -8,18 +8,14 @@
 import SwiftUI
 import Kingfisher
 
-struct PuzzlePiece: Identifiable {
-    var id = UUID()
-    var image: Image
-    var pieceIndex: Int
-}
-
 struct PuzzleView: View {
     @State private var pieces: [PuzzlePiece?] = []
-    @State private var isCompleted: Bool = false
     
     var imageUrlString: String
     var gridSize: Int
+    var existingSession: GameSession?
+    var onSolved: () -> ()
+    var onTilesChanged: (([Int]) -> Void)? = nil
     
     var body: some View {
         GeometryReader { geo in
@@ -29,7 +25,7 @@ struct PuzzleView: View {
             
             ZStack {
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .strokeBorder(Color.textSecondary.opacity(0.5), lineWidth: 2)
+                    .strokeBorder(Color.textSecondary.opacity(0.3), lineWidth: 2)
                     .frame(width: puzzleAreaSize, height: puzzleAreaSize)
                     .position(x: geo.size.width / 2,
                               y: geo.size.height / 2)
@@ -50,18 +46,23 @@ struct PuzzleView: View {
                 .position(x: geo.size.width / 2, y: geo.size.height / 2)
             }
             .onAppear {
-                setupPuzzle(imageURL: URL(string: imageUrlString)!, screenSize: geo.size, pieceSize: pieceSize)
+                setupPuzzle(imageURL: URL(string: imageUrlString)!)
             }
         }
     }
     
-    func setupPuzzle(imageURL: URL, screenSize: CGSize, pieceSize: CGFloat) {
+    func setupPuzzle(imageURL: URL) {
         KingfisherManager.shared.retrieveImage(with: imageURL) { result in
             switch result {
             case .success(let value):
                 DispatchQueue.main.async {
                     let images = splitImageIntoPieces(image: value.image, gridSize: gridSize)
-                    buildPieces(from: images)
+                    
+                    if let existingSession, !existingSession.tilesState.isEmpty {
+                        restorePieces(from: images, tilesState: existingSession.tilesState)
+                    } else {
+                        buildPieces(from: images)
+                    }
                 }
             case .failure(let error):
                 print("Failed to download puzzle image: \(error)")
@@ -80,6 +81,12 @@ struct PuzzleView: View {
         shuffle()
     }
     
+    func restorePieces(from images: [UIImage], tilesState: [Int]) {
+        pieces = tilesState.map({ pieceIndex in
+            pieceIndex == -1 ? nil : PuzzlePiece(image: Image(uiImage: images[pieceIndex]), pieceIndex: pieceIndex)
+        })
+    }
+    
     func shuffle(moves: Int = 200) {
         for _ in 0..<moves {
             let empty = pieces.firstIndex(where: { $0 == nil })!
@@ -96,6 +103,7 @@ struct PuzzleView: View {
         
         pieces.swapAt(index, empty)
         
+        onTilesChanged?(pieces.map { $0?.pieceIndex ?? -1 })
         checkIfSolved()
     }
     
@@ -104,7 +112,7 @@ struct PuzzleView: View {
             guard let piece = pieces[i], piece.pieceIndex == i else {return}
         }
         
-        isCompleted = true
+        onSolved()
     }
     
     func isAdjacent(_ a: Int, _ b: Int) -> Bool {

@@ -24,7 +24,8 @@ struct ImageDetailsScreen: View {
                 HStack {
                     BackButton {
                         if viewModel.puzzleState == .started {
-                            viewModel.pauseCountdown()
+                            viewModel.savePuzzleState()
+//                            viewModel.handleWin()
                         } else {
                             navigation.pop(animated: true)
                         }
@@ -38,6 +39,22 @@ struct ImageDetailsScreen: View {
                     
                 case .notStarted:
                     NotStartedGameView(viewModel: viewModel, isTruncated: $isTruncated, showDescription: $showDescription)
+                    
+                case .won:
+                    VStack {
+                        Spacer()
+                        Text("Congratulations! You finished the puzzle.")
+                            .font(.medium(size: 20))
+                            .foregroundColor(.textSecondary)
+                            .multilineTextAlignment(.center)
+                        Spacer()
+                    }
+                    .background(
+                        Image(.icConfetti)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    )
                 }
             }
             .padding(.all, 20)
@@ -54,15 +71,35 @@ struct ImageDetailsScreen: View {
                 .padding(.horizontal, 20)
                 .presentationDetents([.medium, .large])
             }
+            
+            if viewModel.puzzleState == .won {
+                ModalChooseOptionView(title: "Congratulations!",
+                                      description: "You won this game, now it's time to write your username for the ranking list.",
+                                      username: $viewModel.winnerUsername,
+                                      errorMessage: $viewModel.winnerErrorMess,
+                                      topButtonText: "Continue") {
+                    viewModel.submitWinner()
+                }.transition(.opacity)
+            }
         }
+        .animation(.easeInOut(duration: 0.2), value: viewModel.puzzleState)
         .onChange(of: scenePhase) { oldValue, newValue in
             switch newValue {
             case .active:
                 viewModel.resumeCountdown()
             case .background, .inactive:
-                viewModel.pauseCountdown()
+                viewModel.savePuzzleState()
             default:
                 break
+            }
+        }
+        .onChange(of: viewModel.winnerUsername) { oldValue, newValue in
+            viewModel.winnerErrorMess = nil
+        }
+        .onReceive(viewModel.eventSubject) { event in
+            switch event {
+            case .saved:
+                navigation.pop(animated: true)
             }
         }
     }
@@ -78,6 +115,12 @@ fileprivate struct NotStartedGameView: View {
             Text("\(viewModel.timerDuration / 60):\(viewModel.timerDuration % 60) min")
                 .font(.bold(size: 24))
                 .foregroundStyle(Color.textPrimary)
+            
+            if let currentSession = viewModel.currentSession, currentSession.remainingSeconds != viewModel.timerDuration {
+                Text("Your remaining time: \(currentSession.remainingSeconds / 60):\(currentSession.remainingSeconds % 60) min")
+                    .font(.medium(size: 18))
+                    .foregroundStyle(Color.textSecondary)
+            }
             
             Text("\(viewModel.gridSize)x\(viewModel.gridSize)")
                 .font(.medium(size: 18))
@@ -134,7 +177,14 @@ fileprivate struct NotStartedGameView: View {
         
         Spacer()
         
-        PrimaryButtonView(text: viewModel.isInProgress ? "Continue puzzle" : "Start") {
+        if !viewModel.canStartNewGame {
+            Text("You have reached the maximum parallel games.")
+                .font(.medium(size: 18))
+                .foregroundStyle(Color.textSecondary)
+                .multilineTextAlignment(.center)
+        }
+        
+        PrimaryButtonView(text: viewModel.isInProgress ? "Continue puzzle" : "Start", isDisabled: !viewModel.canStartNewGame) {
             viewModel.startGame()
         }
     }
@@ -149,7 +199,20 @@ fileprivate struct StartedGameView: View {
                 .font(.bold(size: 24))
                 .foregroundStyle(Color.textPrimary)
             
-            PuzzleView(imageUrlString: viewModel.image.urls.full, gridSize: viewModel.gridSize)
+            PuzzleView(imageUrlString: viewModel.image.urls.full,
+                       gridSize: viewModel.gridSize,
+                       existingSession: viewModel.currentSession,
+                       onSolved: {
+                viewModel.handleWin()
+            }, onTilesChanged: { tiles in
+                viewModel.updateTilesState(tiles: tiles)
+            })
+            
+            Button {
+                viewModel.handleWin()
+            } label: {
+                Text("Force win")
+            }
         }
     }
 }

@@ -7,20 +7,8 @@
 
 import SwiftUI
 
-struct Rank {
-    var id = UUID()
-    let name: String
-    let score: Int
-}
-
 struct RankingScreen: View {
-    let ranks: [Rank] = [
-        Rank(name: "Ana", score: 300),
-        Rank(name: "Alexia", score: 250),
-        Rank(name: "Sergiu", score: 200),
-        Rank(name: "Alex", score: 150),
-        Rank(name: "Darius", score: 100)
-    ]
+    @StateObject private var viewModel = RankingViewModel()
     
     var body: some View {
         ZStack {
@@ -34,9 +22,9 @@ struct RankingScreen: View {
                 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 16) {
-                        if ranks.count > 0 {
-                            ForEach(ranks.indices, id: \.self) { index in
-                                WidgetView(rank: ranks[index], place: index + 1)
+                        if viewModel.allWinners.count > 0 {
+                            ForEach(viewModel.allWinners.indices, id: \.self) { index in
+                                WidgetView(winner: viewModel.allWinners[index], place: index + 1)
                             }
                         }
                     }
@@ -50,7 +38,7 @@ struct RankingScreen: View {
 }
 
 fileprivate struct WidgetView: View {
-    let rank: Rank
+    let winner: WinnerEntry
     let place: Int
     
     var body: some View {
@@ -59,7 +47,7 @@ fileprivate struct WidgetView: View {
                 .font(.bold(size: 20))
                 .foregroundColor(textColor)
             
-            Text(rank.name + ": \(rank.score) points")
+            Text(winner.username + ": \(winner.timeTaken / 60):\(winner.timeTaken & 60) mins, \(winner.parallelGamesCount) parallel games ")
                 .font(.semiBold(size: 18))
                 .foregroundColor(.textSecondary)
             
