@@ -27,7 +27,7 @@ struct ActiveGamesScreen: View {
                         if viewModel.allSessions.count > 0 {
                             ForEach(viewModel.allSessions) { game in
                                 GameSessionCard(game: game, onTap: {
-                                    let image = UnsplashPhoto(id: game.id,
+                                    let image = UnsplashPhoto(id: game.imageId,
                                                               title: "",
                                                               artistName: "",
                                                               urls: UnsplashUrl(regular: game.imageUrl, full: game.imageUrl))
