@@ -8,14 +8,6 @@
 import SwiftUI
 import Kingfisher
 
-/*
-//TODO: luni
- -> Nu imi este clar cum se face ranking-ul, adica cum se stabileste lista. La nivel local, sau ar trebui sa ma folosesc de ceva cloud cum ar fi Firebase ca sa fac ranking intre toti user-ii?
- -> De asemenea, tot pentru ranking, cum ar trebui sa stabilesc regulile pt scor? Legat de ideea aceasta: Winners list screen, ranking should take into account the number of parallel games if the case. Adica nu imi este clar cum ar trebui sa stiu sa calculez scorul daca are mai multe jocuri in paralel incepute?
- -> Daca sunt 3 minute la countdown pt rezolvarea unui puzzle, de ce la sectiunea Bonus points spune ideea urmatoare: Settings screen where the we can parametrize the following: The duration of the countdown timer. ? Aceeasi intrebare o am si pt nr maxim de jocuri care pot fi active in paralel. Sa inteleg ca eu le setez default la 3 minute si respectiv 5 jocuri, iar user-ul ulterior din ecranul de setari le poate modifica?
- -> Este ok ca am folosit si librarii externe? Cum ar fi Kingfisher pt imagini
- */
-
 struct HomeScreen: View {
     @EnvironmentObject private var navigation: Router
     @StateObject private var viewModel = HomeViewModel()

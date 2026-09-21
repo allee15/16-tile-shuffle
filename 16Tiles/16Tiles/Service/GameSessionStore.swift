@@ -84,6 +84,7 @@ class GameSessionStore {
     }
     
     private func save() {
+        guard context.hasChanges else {return}
         try? context.save()
     }
 }

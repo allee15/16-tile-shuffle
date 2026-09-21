@@ -11,7 +11,7 @@ import Combine
 class UnsplashService {
     static let shared = UnsplashService()
     private let unsplashApi = UnsplashApi()
-    var bag = Set<AnyCancellable>()
+    private var bag = Set<AnyCancellable>()
     
     private init() { }
     

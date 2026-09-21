@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct PuzzlePiece: Identifiable {
-    var id = UUID()
+    let id = UUID()
     var image: Image
     var pieceIndex: Int
 }

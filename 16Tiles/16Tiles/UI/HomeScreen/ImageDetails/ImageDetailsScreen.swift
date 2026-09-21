@@ -68,6 +68,7 @@ struct ImageDetailsScreen: View {
                 }
                 .padding(.top, 32)
                 .padding(.horizontal, 20)
+                .background(Color.white)
                 .presentationDetents([.medium, .large])
             }
             

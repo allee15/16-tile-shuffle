@@ -9,8 +9,6 @@ import Foundation
 import Combine
 import SwiftyJSON
 
-let accessKey = "fcJPzDh9D0UkAIPdrBDm0pGPqmaKbi4Km4QaqeGz3rw"
-
 class UnsplashApi {
     func getSearchPhotos(query: String, page: Int) -> AnyPublisher<UnsplashPhotoResponse, Error> {
         Future { promise in
@@ -25,7 +23,7 @@ class UnsplashApi {
             var urlRequest = URLRequest(url: (urlComponents?.url)!)
             
             urlRequest.httpMethod = "GET"
-            urlRequest.setValue("Client-ID \(accessKey)", forHTTPHeaderField: "Authorization")
+            urlRequest.setValue("Client-ID \(Secrets.unsplashApiKey)", forHTTPHeaderField: "Authorization")
             
             let dataTask = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
                 if let error = error {
@@ -42,5 +40,16 @@ class UnsplashApi {
             }
             dataTask.resume()
         }.eraseToAnyPublisher()
+    }
+}
+
+enum Secrets {
+    static var unsplashApiKey: String {
+        guard let path = Bundle.main.path(forResource: "Secrets", ofType: "plist"),
+              let dict = NSDictionary(contentsOfFile: path),
+              let key = dict["UnsplashAccessKey"] as? String else {
+            fatalError("Secrets.plist missing or UnsplashAccessKey not found")
+        }
+        return key
     }
 }
