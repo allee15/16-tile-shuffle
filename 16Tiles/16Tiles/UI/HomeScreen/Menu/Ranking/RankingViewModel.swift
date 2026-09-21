@@ -32,7 +32,7 @@ class RankingViewModel: BaseViewModel {
         let seconds = winner.timeTaken % 60
         let gamesLabel = winner.parallelGamesCount == 1 ? "game" : "games"
         
-        return "\(winner.username): \(minutes):\(seconds) mins, \(winner.parallelGamesCount) parallel \(gamesLabel)\n Score: \(score(winner)) pts" +
+        return "\(winner.username): \(minutes):\(seconds) mins, \(winner.parallelGamesCount) parallel \(gamesLabel)\nScore: \(score(winner)) pts" +
         "\nScore = (1000 % time in seconds) * (1 + 20% for each additional parallel game). Faster times and more simultaneous games earn a higher score."
     }
 }
